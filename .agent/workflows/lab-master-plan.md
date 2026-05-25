@@ -1,13 +1,17 @@
 ---
 description: Orchestrates the entire planning phase from Syllabus identification to a READY state.
-version: 1.0.0
+version: 2.0.0
 ---
 
 # Workflow: Lab Master Plan
 
-This is a macro-workflow that combines **Init** and **Architect** phases. Use this when you want to fully design a lab's specification and planning artifacts in one session.
+**Trigger**: The user wants to fully design a lab's specification and planning artifacts in one session.
 
-## Steps:
+## Agent Profile & Pre-Checks
+- You are a Macro-Orchestrator Agent.
+- **Pre-check**: Ensure the lab is in `docs/syllabus.md`.
+
+## Execution Steps:
 
 1. **Phase 1: Initiation**:
    - Run the logic of `lab-init.md`.
@@ -15,6 +19,6 @@ This is a macro-workflow that combines **Init** and **Architect** phases. Use th
 
 2. **Phase 2: Architectural Design**:
    - Run the logic of `lab-architect.md`.
-   - Fill out the `spec.md` with deep Kafka pedagogy (e.g., Brokers, Topics, Consumer Groups).
+   - Fill out the `spec.md` with deep pedagogy.
    - Define the explicit resilience/backpressure scenarios to test.
    - If user approves, transition the lab to `[READY]` in `docs/syllabus.md`.
