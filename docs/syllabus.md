@@ -3,6 +3,10 @@
 ## Level 1: The Event-Driven Mindset & Foundations
 Focus: Shifting the mindset from REST/Synchronous to Event-Driven and mastering Kafka's core mechanics.
 
+- [DONE] **LAB-000: The Event-Driven Landscape & Kafka Fundamentals**
+  - Concepts: Message Queues vs Event Streams (RabbitMQ vs Kafka).
+  - Deep Dive: Why Kafka? Use cases, architectural trade-offs, and **when NOT to use Kafka**.
+  - Practical: Theoretical assessment and understanding the event backbone.
 - [PLANNED] **LAB-001: Architecture Core & Infrastructure**
   - Concepts: Brokers, Topics, Partitions, Replicas, **ISR (In-Sync Replicas)**.
   - Deep Dive: **KRaft (KIP-500/833)** vs Legacy Zookeeper.
