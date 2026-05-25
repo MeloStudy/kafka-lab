@@ -29,6 +29,13 @@ In the real world, you don't just "use Kafka". You evaluate requirements and mak
   **AWS SQS or RabbitMQ**. While Kafka *can* do this, it's overkill. This is a classic "Work Queue" pattern. You just need a queue where competing workers grab a task, process it, and acknowledge it. In Kafka, you are limited by the number of partitions (you can't have 100 workers processing a 10-partition topic concurrently). SQS or RabbitMQ allow infinite competing consumers on a single queue.
   </details>
 
+### Scenario 4: Legacy Database Synchronization (CDC)
+**Requirements**: Your company has a massive, 15-year-old Oracle database that serves as the single source of truth. You are building a new microservice that provides lightning-fast search capabilities using Elasticsearch. Every time a row is inserted, updated, or deleted in Oracle, the change must be reliably mirrored to Elasticsearch. You also plan to add a caching layer (Redis) in the future that will need the exact same stream of updates.
+- **Your Task**: Should you write a batch job, use RabbitMQ, or use Apache Kafka?
+- **Decision**: <details><summary>Click to reveal</summary>
+  **Apache Kafka**. This is the textbook scenario for Change Data Capture (CDC). Kafka acts as the immutable, strictly-ordered backbone. Tools like Debezium can read the Oracle transaction log and stream changes directly into Kafka. Both Elasticsearch and Redis can consume this exact same stream independently (Fan-out) and Kafka's durability ensures no data is lost if the search service crashes for a few hours.
+  </details>
+
 ---
 
 ## 📝 Self-Assessment
