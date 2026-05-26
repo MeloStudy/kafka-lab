@@ -23,6 +23,7 @@ version: 2.0.0
 2. **Planning Audit**:
    - **Zero Ambiguity**: Ensure there are no "TBD", "?", or "To Be Defined" sections in `plan.md`. If decisions are needed, ask the user BEFORE finishing.
    - **Task Granularity**: Ensure `tasks.md` has atomic, verifiable steps.
+   - **Documentation Consistency**: If infrastructure choices (e.g. Apache Kafka vs Bitnami) change during planning, you MUST proactively hunt down and update stale references across all spec documents.
 
 3. **State Transition (READY)**:
    - Once approved by the user, update `docs/syllabus.md` to explicitly mark the lab status as `[READY]`.

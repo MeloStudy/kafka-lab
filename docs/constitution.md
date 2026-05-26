@@ -13,7 +13,7 @@ To ensure maximum engineering rigor, the laboratory focuses exclusively on the *
 
 ### IV. Reproducible & Infrastructure-Aware (Progressive)
 Kafka requires specific infrastructure. To prevent overwhelming cognitive load, the infrastructure MUST be progressive. 
-- Early labs MUST use isolated, lightweight **Bitnami KRaft** containers per lab.
+- Early labs MUST use isolated, lightweight **Official Apache Kafka** KRaft containers per lab.
 - Advanced labs MUST utilize **Testcontainers** for seamless integration testing and service connections.
 
 ### V. Educational Clarity & Theoretical Foundation

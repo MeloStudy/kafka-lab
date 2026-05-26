@@ -23,9 +23,11 @@ version: 2.0.0
    - Write the native `kafka-clients` or `spring-kafka` code.
    - Ensure proper Avro serialization or Schema Registry integration if the spec demands it.
 
-3. **Documentation Generation**:
+3. **Documentation Generation & Pedagogical Rigor**:
    - Write `CONCEPT.md` with deep Kafka internals (e.g. how `poll()` handles heartbeats).
    - Write `README.md` focusing on hands-on CLI commands and Java execution.
+   - **MANDATORY**: Any introduction of `docker-compose.yml` MUST include an `Infrastructure Dissection` explaining the KRaft variables.
+   - **MANDATORY**: Any CLI commands MUST use multi-line `\` syntax and include a `Command Dissection` explaining each flag. Do NOT generate monolithic code blocks.
 
 4. **Tracking**:
    - Check off items in `docs/specs/<slug>/tasks.md`.

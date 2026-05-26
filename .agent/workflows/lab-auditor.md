@@ -20,6 +20,7 @@ version: 2.0.0
 2. **Learner Journey Simulation**:
    - Read the `README.md` exactly as a student would.
    - Verify that all CLI commands provided (e.g. `kafka-topics.sh`, `kafka-console-consumer.sh`) actually match the infrastructure provisioned (e.g. checking ports 9092 vs 29092).
+   - **Pedagogical Verification**: Reject the `README.md` if CLI commands lack `Command Dissection` or if `docker-compose` is introduced without an `Infrastructure Dissection`.
    - Ensure the Self-Assessment questions are present and have correct, collapsible answers.
 
 3. **State Transition (DONE)**:
