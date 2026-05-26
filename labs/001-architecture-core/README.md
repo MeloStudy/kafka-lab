@@ -15,6 +15,12 @@ We are going to deploy a single-node KRaft broker alongside **Kafka-UI** for vis
    ```
 3. Open your browser and navigate to `http://localhost:8080`. You should see the Provectus Kafka-UI dashboard. Verify that the `local-kraft` cluster is online and healthy.
 
+### 🔎 Infrastructure Dissection: The KRaft Configuration
+If you look at the `docker-compose.yml`, you will notice several critical environment variables that configure our node natively (without Zookeeper):
+- `KAFKA_PROCESS_ROLES=controller,broker`: In KRaft, a node can store user data (`broker`), vote on cluster metadata (`controller`), or both. We are running a combined node.
+- `KAFKA_LISTENERS`: Defines the network interfaces Kafka binds to. We use `INTERNAL` (for broker-to-broker traffic), `EXTERNAL` (for your future Java apps), and `CONTROLLER` (for KRaft quorum voting).
+- `KAFKA_CONTROLLER_QUORUM_VOTERS=0@kafka:9093`: Tells the broker who the voting controllers are. Since it is a single-node cluster, it votes for itself (Node ID 0).
+
 ## Step 2: Access the CLI Tools
 
 Kafka ships with a suite of bash scripts to manage the cluster natively. Since we are using Docker, these scripts are located inside the Kafka container.
@@ -31,8 +37,16 @@ Once inside the container, we will create our first topic.
 
 1. **Create a topic** called `lab001.events` with 3 partitions and a replication factor of 1:
    ```bash
-   kafka-topics.sh --create --topic lab001.events --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092
+   kafka-topics.sh \
+     --create \
+     --topic lab001.events \
+     --partitions 3 \
+     --replication-factor 1 \
+     --bootstrap-server localhost:9092
    ```
+   *Command Dissection:*
+   - `--partitions 3`: Divides the topic into 3 physical directories on disk, allowing up to 3 consumers to process data in parallel later.
+   - `--replication-factor 1`: We only keep 1 copy of the data because we have a single broker.
 
 2. **List all topics** to verify it was created:
    ```bash
@@ -53,7 +67,11 @@ We will now simulate data flowing through the system. We need two separate termi
 Exec into the container and start the console producer:
 ```bash
 docker exec -it 001-architecture-core-kafka-1 bash
-kafka-console-producer.sh --topic lab001.events --bootstrap-server localhost:9092
+
+# Start pushing messages to the topic
+kafka-console-producer.sh \
+  --topic lab001.events \
+  --bootstrap-server localhost:9092
 ```
 Type a few messages (e.g., "Hello Kafka", "Event 2") and hit Enter after each.
 
@@ -61,14 +79,21 @@ Type a few messages (e.g., "Hello Kafka", "Event 2") and hit Enter after each.
 Exec into the container in a new tab and start the console consumer:
 ```bash
 docker exec -it 001-architecture-core-kafka-1 bash
-kafka-console-consumer.sh --topic lab001.events --bootstrap-server localhost:9092
+
+# Start consuming messages
+kafka-console-consumer.sh \
+  --topic lab001.events \
+  --bootstrap-server localhost:9092
 ```
 
 Notice that the consumer **did not** print the messages you just sent! Why? Because by default, a new consumer starts reading from the *tail* of the log (new messages only). 
 
 To read historical data, stop the consumer (`Ctrl+C`) and run it again with the `--from-beginning` flag:
 ```bash
-kafka-console-consumer.sh --topic lab001.events --bootstrap-server localhost:9092 --from-beginning
+kafka-console-consumer.sh \
+  --topic lab001.events \
+  --bootstrap-server localhost:9092 \
+  --from-beginning
 ```
 You should now see all your previous messages!
 

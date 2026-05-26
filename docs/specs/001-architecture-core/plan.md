@@ -9,7 +9,6 @@
   - Detail Brokers, Partitions, Replicas, and ISR.
   - Explain the KRaft architecture.
   - (REFINEMENT) Add deep explanation of Partitions (physical files on disk, resources used).
-  - (REFINEMENT) Add deep explanation of Consumer Groups (how they balance work, partition mapping, multiple groups).
 
 ## Phase 3: Code & Practice
 - [ ] Scaffold `labs/001-architecture-core/` directory.

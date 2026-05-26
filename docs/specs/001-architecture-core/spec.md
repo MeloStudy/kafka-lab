@@ -16,7 +16,7 @@
 
 ## 3. Infrastructure & Tooling
 *Define the infrastructure needed and CLI tools that should be demonstrated.*
-- **Infrastructure Profile**: Option A (Basic KRaft Broker + Kafka-UI). We will use `docker-compose-basic.yml` which deploys a single Bitnami Kafka node and Provectus Kafka-UI.
+- **Infrastructure Profile**: Option A (Basic KRaft Broker + Kafka-UI). We will use `docker-compose-basic.yml` which deploys a single official Apache Kafka node and Provectus Kafka-UI.
 - **CLI Commands**:
   - `kafka-topics.sh`: `--create`, `--list`, `--describe`, `--alter`.
   - `kafka-console-producer.sh`: Producing plain text messages.
