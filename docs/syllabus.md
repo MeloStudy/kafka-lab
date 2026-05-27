@@ -17,7 +17,7 @@ Focus: Shifting the mindset from REST/Synchronous to Event-Driven and mastering 
 - [DONE] **LAB-003: The Consumer API**
   - Concepts: Consumer Groups, Offsets (Auto vs Manual), **Heartbeat Thread**, `poll()` loop mechanics, `max.poll.interval.ms`.
   - Deep Dive: **Rebalance Protocol** (Eager vs Cooperative Sticky Assignor).
-- [PLANNED] **LAB-004: Testing Fundamentals (TDD)**
+- [DONE] **LAB-004: Testing Fundamentals (TDD)**
   - Concepts: `TopologyTestDriver`, `EmbeddedKafka`.
   - Deep Dive: **Testcontainers** for robust integration testing, establishing the TDD baseline for all future labs.
 - [PLANNED] **MINI-PROJECT-1: Enterprise Event-Driven Workflow**
