@@ -12,6 +12,7 @@ A Kafka **Broker** is a single JVM process running on a server (or container). A
 - **Partition**: The physical manifestation of a topic.
   - **The Physical View**: Physically, a partition is a directory on the Broker's hard drive (e.g., `orders-0`). Inside this directory, Kafka writes the events to append-only log files (segments like `0000.log`). 
   - **Resource Cost**: Partitions consume OS File Descriptors and OS Page Cache. Creating hundreds of thousands of partitions on a small cluster will cause high latency due to massive metadata overhead and disk thrashing.
+  > 📐 **Architecture Note (Partition Limits)**: A general rule of thumb is to limit partitions to ~4,000 per broker without KRaft. With KRaft, modern clusters can handle hundreds of thousands of partitions per cluster, but you should still avoid unnecessary over-partitioning.
 - **Offset**: An immutable, strictly increasing 64-bit integer assigned to every message within a partition.
   - **Index Files**: To quickly find a message by its offset, Kafka maintains an index file (`0000.index`) mapping the offset to the physical byte position in the `.log` file.
   - **Immutability**: Once an offset is assigned and written to disk, it can NEVER be changed or deleted until the entire segment expires.
@@ -23,6 +24,8 @@ A Kafka **Broker** is a single JVM process running on a server (or container). A
 
 ## 3. High Availability: Replicas and ISR
 To prevent data loss during hardware failures, Kafka uses a **Replication Factor (RF)** to copy partitions across different brokers.
+> ⚠️ **Golden Rule**: The Replication Factor **CANNOT** exceed the total number of brokers in your cluster. If you have 3 brokers, the maximum RF is 3. Attempting to set an RF of 4 will result in an immediate CLI error.
+
 - **Leader**: Exactly one broker is elected as the Leader for a partition. ALL read and write requests from clients must go to this Leader.
 - **Followers (Replica Fetchers)**: The other brokers holding copies are Followers. They do not serve clients. Instead, they run background threads that constantly pull (fetch) new data from the Leader.
 - **The High Watermark**: A message is only considered "Committed" (safe for consumers to read) when it has been successfully replicated to all in-sync followers. This committed offset boundary is called the High Watermark.
@@ -37,6 +40,7 @@ A distributed cluster needs a central "brain" to track metadata: Which brokers a
 - **Modern (KRaft)**: Introduced via KIP-500, Kafka now manages its own metadata using the Raft consensus protocol.
   - **The Metadata Log**: Instead of storing cluster state in Zookeeper, KRaft stores the cluster metadata as a standard Kafka topic (`__cluster_metadata`). 
   - **Quorum Controllers**: Certain brokers are designated with the `controller` role. They form a voting quorum. One is elected the Active Controller. When a broker crashes, the Active Controller appends a "Broker Down" event to the metadata log, and all other brokers instantly read that event and adjust their routing tables.
+  > 📐 **Architecture Note (Controller Quorum Sizing)**: Production clusters should use an **odd number of controllers** (typically 3). Since KRaft uses majority voting, a 3-controller quorum can tolerate 1 failure, and a 5-controller quorum can tolerate 2. Having an even number provides no extra fault tolerance but slows down voting.
 
 ### ⚙️ How Configuration Changes (Zookeeper vs KRaft)
 If you look at older Kafka tutorials, you will see environment variables pointing to Zookeeper. Here is the modern paradigm:
