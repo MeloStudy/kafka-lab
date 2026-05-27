@@ -14,7 +14,7 @@ Focus: Shifting the mindset from REST/Synchronous to Event-Driven and mastering 
 - [DONE] **LAB-002: The Producer API**
   - Concepts: Acks (0, 1, all), Retries, Batching (`linger.ms`, `batch.size`), Compression (`snappy`, `zstd`), Partitioner.
   - Deep Dive: **The Idempotent Producer** (`enable.idempotence=true`), **Message Keys** (Ordering guarantees), and **Headers** (Correlation/Trace IDs).
-- [PLANNED] **LAB-003: The Consumer API**
+- [DONE] **LAB-003: The Consumer API**
   - Concepts: Consumer Groups, Offsets (Auto vs Manual), **Heartbeat Thread**, `poll()` loop mechanics, `max.poll.interval.ms`.
   - Deep Dive: **Rebalance Protocol** (Eager vs Cooperative Sticky Assignor).
 - [PLANNED] **LAB-004: Testing Fundamentals (TDD)**
