@@ -24,16 +24,16 @@
   - `kafka-console-consumer.sh` (with property `--property print.headers=true` to observe headers)
 
 ## 4. Practical Implementation (README.md)
-- **Step 1**: Scaffold a Java Maven project with `kafka-clients` and Testcontainers.
+- **Step 1**: Scaffold a Java Maven project with `kafka-clients` (Testcontainers will be introduced in LAB-004).
 - **Step 2**: Implement a basic Producer (focusing on Acks).
 - **Step 3**: Implement a High-Throughput Producer (tweaking `batch.size`, `linger.ms`, `compression.type`).
 - **Step 4**: Implement an Idempotent Producer with message keys and headers.
 - **Step 5**: Simulate failure scenarios (e.g., stopping a broker) and observe retries.
 
 ## 5. TDD & Technical Verification
-- **Test 1**: Verify messages with the same key end up in the same partition using `KafkaProducer` and Testcontainers.
-- **Test 2**: Verify Idempotent producer properties are correctly configured and duplicates are avoided during retries.
-- **Test 3**: Verify Headers (Correlation IDs) are correctly attached to the `ProducerRecord` and retrievable.
+- **Test 1**: Verify messages with the same key are assigned correctly using `MockProducer`.
+- **Test 2**: Verify Idempotent producer properties are correctly configured.
+- **Test 3**: Verify Headers (Correlation IDs) are correctly attached to the `ProducerRecord` and retrievable using `MockProducer`.
 
 ## 6. Resilience & Delivery Semantics
 - **Delivery Semantics**: The lab will demonstrate the shift from At-Least-Once (default historically, though idempotence is default in newer clients) to Exactly-Once (single-partition) using the Idempotent Producer.

@@ -140,6 +140,16 @@ docker-compose start kafka
 
 5. Observe the producer recover and successfully resume sending messages!
 
+### 8. Simulating Backpressure (BufferExhaustedException)
+Kafka producers hold messages in memory before sending them over the network. The maximum memory allocated for this is `buffer.memory`. If you produce messages faster than they can be sent (e.g., due to network latency or broker overload), the buffer will fill up.
+When the buffer is full, the producer will block (wait) up to `max.block.ms`. If space is still not available after that time, it will throw a `BufferExhaustedException` (or `TimeoutException` in newer clients).
+
+To simulate this locally, we have a runner that intentionally limits the buffer size and blocks for a very short time:
+```bash
+mvn exec:java -Dexec.mainClass="com.kafkalab.producer.BackpressureRunner"
+```
+You will observe the producer rapidly queuing messages until it runs out of memory and throws the exception.
+
 ## Cleanup
 Once finished, tear down the infrastructure to free up ports and memory:
 ```bash

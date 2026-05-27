@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class IdempotentProducer {
 
-    public static KafkaProducer<String, String> createProducer(String bootstrapServers) {
+    public static Properties buildProperties(String bootstrapServers) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -20,6 +20,10 @@ public class IdempotentProducer {
         props.put(ProducerConfig.RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
         props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 5); // Must be <= 5
         
-        return new KafkaProducer<>(props);
+        return props;
+    }
+
+    public static KafkaProducer<String, String> createProducer(String bootstrapServers) {
+        return new KafkaProducer<>(buildProperties(bootstrapServers));
     }
 }
