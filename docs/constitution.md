@@ -28,6 +28,9 @@ As the software landscape evolves, the laboratory MUST evaluate how Event-Driven
 ### VIII. Enterprise Observability
 Without observability, reactive Kafka systems are effectively unoperable. Logs must describe the event flow (using Trace IDs and Correlation IDs), and Metrics must provide continuous visibility into system health (Consumer Lag, Throughput, Error Rates).
 
+### IX. Language Policy
+All codebase elements (variables, methods, classes) and inline code comments MUST be written exclusively in **English**. Educational markdown files (`README.md`, `CONCEPT.md`, `spec.md`) should also default to English to maintain international standards unless specifically translated for a localized cohort.
+
 ## Lab Design Standards
 
 - **Spec Planning**: Mandatory `spec.md`, `plan.md`, and `tasks.md` before coding. These artifacts MUST reside in `docs/specs/{lab-slug}/`.
