@@ -3,7 +3,7 @@ package com.kafkalab.producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.errors.BufferExhaustedException;
+import org.apache.kafka.clients.producer.BufferExhaustedException;
 import org.apache.kafka.common.errors.TimeoutException;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class BackpressureRunner {
                 });
                 log.info("Queued message {}", i);
             }
-        } catch (BufferExhaustedException | TimeoutException e) {
+        } catch (TimeoutException e) {
             log.error("Caught expected exception due to backpressure: {}", e.getClass().getSimpleName());
             log.error("Message: {}", e.getMessage());
         } catch (Exception e) {
