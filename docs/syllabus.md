@@ -26,7 +26,7 @@ Focus: Shifting the mindset from REST/Synchronous to Event-Driven and mastering 
 ## Level 2: Advanced Core & Resiliency
 Focus: Deep dive into internal mechanics, failure recovery, and advanced control.
 
-- [PLANNED] **LAB-005: Delivery Semantics & Transactions**
+- [DONE] **LAB-005: Delivery Semantics & Transactions**
   - Concepts: At-most-once, At-least-once, **Exactly-once (EOS)**.
   - Deep Dive: Transaction Coordinator, `transactional.id`, 2PC (Two-Phase Commit) in Kafka.
 - [PLANNED] **LAB-006: Advanced Consumer Patterns**
