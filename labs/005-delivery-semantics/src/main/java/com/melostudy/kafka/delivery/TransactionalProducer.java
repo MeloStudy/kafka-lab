@@ -33,6 +33,7 @@ public class TransactionalProducer {
                 producer.send(new ProducerRecord<>(topic, msg));
             }
             if (simulateError) {
+                producer.flush(); // Ensure the broker receives the uncommitted messages before the crash
                 throw new RuntimeException("Simulated error in processing loop");
             }
             producer.commitTransaction();

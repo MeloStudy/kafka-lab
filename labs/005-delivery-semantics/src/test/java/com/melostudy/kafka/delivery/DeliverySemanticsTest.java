@@ -4,7 +4,7 @@ import org.apache.kafka.common.errors.ProducerFencedException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class DeliverySemanticsTest {
 
     @BeforeAll
     static void setUp() {
-        kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.0"));
+        kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:4.3.0"));
         kafka.start();
         bootstrapServers = kafka.getBootstrapServers();
     }
