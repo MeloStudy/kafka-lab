@@ -18,6 +18,7 @@
         <module>003-consumer-api</module>
         <module>004-testing-fundamentals</module>
         <module>005-delivery-semantics</module>
+        <module>006-advanced-consumer-patterns</module>
     </modules>
 
 </project>

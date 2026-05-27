@@ -29,7 +29,7 @@ Focus: Deep dive into internal mechanics, failure recovery, and advanced control
 - [DONE] **LAB-005: Delivery Semantics & Transactions**
   - Concepts: At-most-once, At-least-once, **Exactly-once (EOS)**.
   - Deep Dive: Transaction Coordinator, `transactional.id`, 2PC (Two-Phase Commit) in Kafka.
-- [PLANNED] **LAB-006: Advanced Consumer Patterns**
+- [DONE] **LAB-006: Advanced Consumer Patterns**
   - Concepts: Manual Offset Commits (Sync vs Async), Consumer Rebalance Listeners, Standby Consumers.
 - [PLANNED] **LAB-007: Data Contracts & Schema Registry**
   - Concepts: Avro, Protobuf, Schema Evolution (Forward, Backward, Full Compatibility).
