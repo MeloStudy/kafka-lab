@@ -70,13 +70,16 @@ Focus: Integrating Kafka with modern Spring frameworks and deep observability.
 ## Level 5: Architecture & The Horizon
 Focus: System design, security, and next-generation AI integrations.
 
-- [PLANNED] **LAB-016: Security**
+- [PLANNED] **LAB-016: Cluster Sizing & Capacity Planning**
+  - Concepts: Sizing math for Brokers, Partitions, and Replication Factors based on SLA and Throughput.
+  - Deep Dive: Hardware considerations (Disk, CPU, Network) and Partition limits.
+- [PLANNED] **LAB-017: Security**
   - Concepts: SSL/TLS encryption, SASL/SCRAM authentication, ACLs (Access Control Lists).
-- [PLANNED] **LAB-017: Multi-Datacenter & MirrorMaker 2**
+- [PLANNED] **LAB-018: Multi-Datacenter & MirrorMaker 2**
   - Concepts: Active/Active, Active/Passive setups, Offset translation, MM2 Connectors.
-- [PLANNED] **LAB-018: Event Sourcing & CQRS Patterns**
+- [PLANNED] **LAB-019: Event Sourcing & CQRS Patterns**
   - Concepts: Kafka as Source of Truth, Event Store vs State Store, Command vs Query separation.
-- [PLANNED] **LAB-019: Kafka in the AI Era (Real-Time Context)**
+- [PLANNED] **LAB-020: Kafka in the AI Era (Real-Time Context)**
   - Concepts: Streaming/Batch convergence, Real-time Context for Agents.
   - Deep Dive: Feeding RAG (Retrieval-Augmented Generation) pipelines and Vector Databases via Kafka.
 - [PLANNED] **CAPSTONE PROJECT: Enterprise Event-Driven Microservices**
