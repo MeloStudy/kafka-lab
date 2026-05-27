@@ -26,3 +26,40 @@ When a network error occurs, the producer automatically retries. But what if the
 ## 5. Message Keys & Partitioning
 By default, Kafka uses a **Sticky Partitioner** for records without keys, batching records to one partition at a time to optimize throughput.
 However, if a `Key` is provided (e.g., `user-id-123`), Kafka hashes the key and guarantees that all messages with the same key will ALWAYS land in the same partition. This guarantees strict chronological ordering for that specific entity.
+
+## 6. Message Headers
+Just like HTTP headers, Kafka messages can contain **Headers**. These are key-value pairs of metadata attached to the record, separate from the payload.
+- They are commonly used for **Tracing (e.g., Trace IDs)**, routing information, or identifying the schema/format of the payload without having to deserialize the value itself.
+
+## 7. Topic Auto-Creation (`auto.create.topics.enable`)
+What happens if a producer tries to send a message to a topic that does not exist?
+- If `auto.create.topics.enable=true` (the default on many basic clusters), the broker will automatically create the topic using default partition and replication settings.
+- **Best Practice**: In production, this should be `false`. Producers should not dictate infrastructure. Relying on auto-creation often leads to topics with suboptimal partitions (usually 1 partition by default), permanently bottlenecking throughput.
+
+## 8. Anatomy of a Kafka Record
+When we talk about the anatomy of a Kafka message, there are two ways to look at it: what the developer sees (the API) vs what Kafka stores on disk (the internal format).
+
+### 1. The Developer Perspective (`ProducerRecord` / `ConsumerRecord`)
+From the point of view of a Java developer writing Kafka code, a record consists primarily of:
+- **Topic & Partition**: Where the message is going.
+- **Timestamp**: When the event occurred (or was appended).
+- **Key**: (Optional) Used for logical partitioning and ordering.
+- **Value**: The actual payload of the message.
+- **Headers**: (Optional) Key-Value pairs for metadata (like HTTP headers).
+
+### 2. The Internal Storage & Wire Format (RecordBatch v2)
+To achieve massive throughput, Kafka doesn't just serialize the API object directly. Starting with Kafka 0.11 (Format v2), messages are never written individually; they are always wrapped inside a **Record Batch**.
+
+**The Record Batch Header**: Contains metadata that applies to all records within it (saving massive overhead).
+- *Base Offset & Timestamp*
+- *Producer ID (PID) & Epoch* (for idempotence/transactions)
+- *Compression Flags* (compression is applied to the *entire batch*, not individual records).
+
+**The Individual Record**: Inside the batch, the actual records are stripped down to be extremely lightweight:
+- **Timestamp Delta**: Difference from the batch's base timestamp (saves bytes vs storing full timestamps).
+- **Offset Delta**: Difference from the batch's base offset.
+- **Key Length & Key**
+- **Value Length & Value**
+- **Headers Array**
+
+*Key Takeaway*: Understanding this anatomy explains why `linger.ms` and `batch.size` are so effective. Grouping 1,000 records into a single `RecordBatch` means paying the overhead of the Batch Header (and network compression) only once, drastically improving throughput!

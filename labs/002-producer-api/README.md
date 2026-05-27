@@ -1,7 +1,7 @@
 # LAB-002: The Producer API
 
 ## Overview
-This lab covers the internal mechanics of the Kafka Producer API, including Acks, Retries, Batching, Compression, Idempotence, Message Keys, and Headers.
+This lab covers the internal mechanics of the Kafka Producer API, including Acks, Retries, Batching, Compression, Idempotence, Message Keys, Headers, and Topic Auto-Creation.
 
 > **Status**: `[DONE]`
 
@@ -12,7 +12,7 @@ To begin, start the local KRaft cluster.
 docker-compose up -d
 ```
 
-### Infrastructure Dissection
+### 🔎 Infrastructure Dissection
 The `docker-compose.yml` uses Kafka in KRaft mode (no Zookeeper).
 - `KAFKA_PROCESS_ROLES=controller,broker`: This single container acts as both the data broker and the cluster controller.
 - `KAFKA_LISTENERS=INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092...`: We configure internal routing for Docker-to-Docker communication (29092) and external for your host machine (9092).
@@ -22,26 +22,71 @@ The `docker-compose.yml` uses Kafka in KRaft mode (no Zookeeper).
 
 Before writing Java code, let's test using the CLI.
 
-### 1. Create a Topic
-Create a topic with 3 partitions to test message keys.
+### 1. The Dangers of Topic Auto-Creation
+What happens if you produce to a topic that doesn't exist? Let's try it:
 ```bash
-docker exec -it <container_name_or_id> \
+docker-compose exec kafka \
+  kafka-console-producer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic auto-created-topic
+```
+*(Type a message and hit enter. Press Ctrl+C to exit).*
+
+Now, let's inspect the topic that Kafka automatically created:
+```bash
+docker-compose exec kafka \
+  kafka-topics.sh \
+  --bootstrap-server localhost:9092 \
+  --describe \
+  --topic auto-created-topic
+```
+**Observation**: It likely created it with only 1 partition! This is why `auto.create.topics.enable` should be `false` in production. Always create topics explicitly.
+
+### 2. Create a Proper Topic
+Create a topic explicitly with 3 partitions to test message keys.
+```bash
+docker-compose exec kafka \
   kafka-topics.sh \
   --bootstrap-server localhost:9092 \
   --create \
   --topic producer-lab \
   --partitions 3
 ```
-**Command Dissection:**
-- `docker exec -it ...`: Runs the command inside the running Kafka container.
-- `kafka-topics.sh`: The built-in script for topic management.
-- `--bootstrap-server localhost:9092`: Connects to the local broker.
-- `--partitions 3`: Ensures we have multiple partitions to observe key hashing behavior.
 
-### 2. Produce Messages with Headers
-Let's produce a message that includes custom Headers (useful for Trace IDs).
+### 3. Produce Messages with Acks
+Let's produce a message explicitly demanding `acks=all` (full quorum acknowledgment) before considering it successful.
 ```bash
-docker exec -it <container_name_or_id> \
+docker-compose exec kafka \
+  kafka-console-producer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic producer-lab \
+  --producer-property acks=all
+```
+*(Type a message and hit enter. Press Ctrl+C to exit).*
+
+**Command Dissection:**
+- `--producer-property acks=all`: Injects the `acks` configuration directly into the underlying Java producer used by the CLI.
+
+### 4. Produce Messages with Keys
+By default, messages without keys are sent round-robin. Let's send a message with a specific key to guarantee it lands in a specific partition.
+```bash
+docker-compose exec kafka \
+  kafka-console-producer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic producer-lab \
+  --property "parse.key=true" \
+  --property "key.separator=:"
+```
+*(Type exactly: `user1:my event payload` and hit enter. Press Ctrl+C to exit).*
+
+**Command Dissection:**
+- `--property "parse.key=true"`: Tells the CLI to expect a key.
+- `key.separator=:`: Everything before the `:` is the key (`user1`), everything after is the value.
+
+### 5. Produce Messages with Headers
+Headers are great for passing metadata (like Trace IDs) without touching the payload.
+```bash
+docker-compose exec kafka \
   kafka-console-producer.sh \
   --bootstrap-server localhost:9092 \
   --topic producer-lab \
@@ -50,12 +95,11 @@ docker exec -it <container_name_or_id> \
   --property "key.separator=:" \
   --property "headers.separator=;"
 ```
-*(Once started, type: `traceId:1234;user1:message payload` and hit enter).*
+*(Type exactly: `traceId:1234;user1:my event payload` and hit enter. Press Ctrl+C to exit).*
 
 **Command Dissection:**
 - `--property "parse.headers=true"`: Tells the CLI to expect headers in the input.
-- `--property "parse.key=true"`: Tells the CLI to expect a key.
-- The separators define how the CLI parses your raw string input.
+- `headers.separator=;`: Everything before the `;` is the header (`traceId:1234`), everything after is the key/value.
 
 ## Code Execution
 
@@ -64,12 +108,13 @@ The Java implementation demonstrates three different producer profiles:
 2. `HighThroughputProducer`: Tweaks `batch.size` and `linger.ms`.
 3. `IdempotentProducer`: Enforces strict exactly-once semantics per partition.
 
-Run the test suite using Testcontainers to verify the behavior automatically:
+### 6. Unit Testing (MockProducer)
+We use `MockProducer` to unit test our logic without needing a real broker (Integration testing with real brokers is covered in LAB-004!).
 ```bash
 mvn clean test
 ```
 
-### 5. Simulating Resilience (Retries)
+### 7. Simulating Resilience (Retries)
 To manually observe the Idempotent Producer in action during a failure:
 1. Run the `ResilienceRunner` in a separate terminal:
 ```bash
@@ -77,13 +122,22 @@ mvn exec:java -Dexec.mainClass="com.kafkalab.producer.ResilienceRunner"
 ```
 2. While it sends messages every second, stop the Kafka container:
 ```bash
-docker stop <container_name_or_id>
+docker-compose stop kafka
 ```
+
+**Command Dissection:**
+- `docker-compose stop kafka`: Sends a SIGTERM to the specific 'kafka' service container defined in the compose file, simulating a broker crash or network partition.
+
 3. Observe the `ResilienceRunner` logs. It will log `NetworkException` and automatically retry sending the message without crashing, up to its `delivery.timeout.ms`.
+
 4. Start the container again:
 ```bash
-docker start <container_name_or_id>
+docker-compose start kafka
 ```
+
+**Command Dissection:**
+- `docker-compose start kafka`: Brings the broker back online, simulating network recovery.
+
 5. Observe the producer recover and successfully resume sending messages!
 
 ## Cleanup
