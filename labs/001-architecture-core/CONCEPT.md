@@ -16,6 +16,11 @@ A Kafka **Broker** is a single JVM process running on a server (or container). A
   - **Index Files**: To quickly find a message by its offset, Kafka maintains an index file (`0000.index`) mapping the offset to the physical byte position in the `.log` file.
   - **Immutability**: Once an offset is assigned and written to disk, it can NEVER be changed or deleted until the entire segment expires.
 
+### ⚠️ Modifying and Deleting Topics
+- **Increasing Partitions**: You can dynamically increase the number of partitions for a topic. The new partitions will be created as empty directories on the brokers.
+- **Decreasing Partitions**: You **CANNOT** decrease the number of partitions. Doing so would orphan the data residing in the removed partitions, breaking the strictly increasing offset guarantee and causing data loss.
+- **Deleting Topics**: Deleting a topic physically removes all associated partition directories and `.log` files from the brokers' hard drives. This is irreversible.
+
 ## 3. High Availability: Replicas and ISR
 To prevent data loss during hardware failures, Kafka uses a **Replication Factor (RF)** to copy partitions across different brokers.
 - **Leader**: Exactly one broker is elected as the Leader for a partition. ALL read and write requests from clients must go to this Leader.

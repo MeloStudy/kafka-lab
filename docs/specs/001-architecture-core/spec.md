@@ -18,7 +18,7 @@
 *Define the infrastructure needed and CLI tools that should be demonstrated.*
 - **Infrastructure Profile**: Option A (Basic KRaft Broker + Kafka-UI). We will use `docker-compose-basic.yml` which deploys a single official Apache Kafka node and Provectus Kafka-UI.
 - **CLI Commands**:
-  - `kafka-topics.sh`: `--create`, `--list`, `--describe`, `--alter`.
+  - `kafka-topics.sh`: `--create`, `--list`, `--describe`, `--alter`, `--delete`.
   - `kafka-console-producer.sh`: Producing plain text messages.
   - `kafka-console-consumer.sh`: Consuming messages, exploring `--from-beginning`.
 
@@ -26,7 +26,7 @@
 *Describe the hands-on part.*
 - **Step 1: Provisioning**: Start the cluster using Docker Compose. Open Kafka-UI (`http://localhost:8080`) to verify the broker is alive.
 - **Step 2: CLI Access**: Exec into the Kafka container (`docker exec -it kafka bash`) to run CLI tools.
-- **Step 3: Managing Topics**: Create a topic `lab001.events` with 3 partitions and replication factor 1. Describe the topic to view the Leader and ISR list.
+- **Step 3: Managing Topics**: Create a topic `lab001.events` with 3 partitions and replication factor 1. Describe the topic. Alter the topic to increase partitions to 4. Delete the topic at the end of the lab.
 - **Step 4: Publishing & Consuming**: Use the console producer to send 5 messages. Use the console consumer to read them. Stop the consumer, send 5 more messages, and show how the consumer only reads the new ones unless `--from-beginning` is used.
 
 ## 5. TDD & Technical Verification

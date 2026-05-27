@@ -31,7 +31,7 @@ To successfully run these laboratories, you need the following environment:
 
 ### Local Environment Setup
 We use a **Progressive Environment** approach for infrastructure.
-- In early labs (e.g., Level 1 & 2), you will find a minimal `docker-compose.yml` (using Bitnami Kafka) inside the specific lab directory to help you focus on the basics without overwhelming complexity.
+- In early labs (e.g., Level 1 & 2), you will find a minimal `docker-compose.yml` (using Official Apache Kafka) inside the specific lab directory to help you focus on the basics without overwhelming complexity.
 - In advanced labs (Level 4+), we will utilize **Spring Boot Testcontainers (Service Connections)** where the Java application automatically provisions ephemeral Kafka containers, allowing you to focus 100% on code.
 
 To start a local environment for a specific lab, navigate to its directory and run:

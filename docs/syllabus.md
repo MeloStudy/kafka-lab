@@ -10,7 +10,7 @@ Focus: Shifting the mindset from REST/Synchronous to Event-Driven and mastering 
 - [DONE] **LAB-001: Architecture Core & Infrastructure**
   - Concepts: Brokers, Topics, Partitions, Replicas, **ISR (In-Sync Replicas)**.
   - Deep Dive: **KRaft (KIP-500/833)** vs Legacy Zookeeper.
-  - Practical: Dockerized (Bitnami KRaft), **Kafka-UI** for observability, and **CLI Tools** (`kafka-topics.sh`, `kafka-console-producer.sh`).
+  - Practical: Dockerized (Apache KRaft), **Kafka-UI** for observability, and **CLI Tools** (`kafka-topics.sh` with create/alter/delete, `kafka-console-producer.sh`).
 - [DONE] **LAB-002: The Producer API**
   - Concepts: Acks (0, 1, all), Retries, Batching (`linger.ms`, `batch.size`), Compression (`snappy`, `zstd`), Partitioner.
   - Deep Dive: **The Idempotent Producer** (`enable.idempotence=true`), **Message Keys** (Ordering guarantees), and **Headers** (Correlation/Trace IDs).

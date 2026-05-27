@@ -47,6 +47,7 @@ Once inside the container, we will create our first topic.
    *Command Dissection:*
    - `--partitions 3`: Divides the topic into 3 physical directories on disk, allowing up to 3 consumers to process data in parallel later.
    - `--replication-factor 1`: We only keep 1 copy of the data because we have a single broker.
+   > 💡 **What about defaults?** If you omit `--partitions` or `--replication-factor`, Kafka will fall back to the broker's default configurations (`num.partitions` and `default.replication.factor`, which are typically both `1` out of the box). It is a best practice to **always** specify them explicitly to avoid surprises.
 
 2. **List all topics** to verify it was created:
    ```bash
@@ -58,6 +59,20 @@ Once inside the container, we will create our first topic.
    kafka-topics.sh --describe --topic lab001.events --bootstrap-server localhost:9092
    ```
    > Look closely at the output. For each partition (0, 1, and 2), it will tell you which broker is the `Leader`, and the `Isr` (In-Sync Replicas) list. Since we only have one broker (Node ID 0), it is both the leader and the only member of the ISR.
+
+4. **Alter the topic** to increase the number of partitions to 4:
+   ```bash
+   kafka-topics.sh \
+     --alter \
+     --topic lab001.events \
+     --partitions 4 \
+     --bootstrap-server localhost:9092
+   ```
+
+5. **Describe the topic again** to verify the new partition was created:
+   ```bash
+   kafka-topics.sh --describe --topic lab001.events --bootstrap-server localhost:9092
+   ```
 
 ## Step 4: The Producer & Consumer Flow
 
@@ -97,6 +112,22 @@ kafka-console-consumer.sh \
 ```
 You should now see all your previous messages!
 
+## Step 5: Clean Up (Deleting Topics)
+
+Once you are done experimenting, it is good practice to clean up your environment. Deleting a topic physically removes its data directories from the broker.
+
+```bash
+kafka-topics.sh \
+  --delete \
+  --topic lab001.events \
+  --bootstrap-server localhost:9092
+```
+
+You can verify it has been removed by running the list command again:
+```bash
+kafka-topics.sh --list --bootstrap-server localhost:9092
+```
+
 ---
 
 ## 📝 Self-Assessment
@@ -119,6 +150,12 @@ Yes, absolutely. Partitions are independent logs. A single broker can hold hundr
 <summary><b>3. What does it mean if a replica falls out of the ISR (In-Sync Replicas) list?</b></summary>
 <br>
 It means that a Follower broker has fallen too far behind the Leader (usually due to network lag, high GC pauses, or it crashed). If the Leader crashes while a replica is out of the ISR, that replica cannot be safely elected as the new Leader without risk of data loss.
+</details>
+
+<details>
+<summary><b>4. Why can you increase the number of partitions for a topic, but you cannot decrease them?</b></summary>
+<br>
+Decreasing partitions is not allowed because it would orphan the data residing in the removed partitions. Kafka guarantees strictly increasing offsets for messages within a partition. If a partition was deleted, all messages in it would be lost, breaking consumer applications that rely on those offsets and causing silent data loss.
 </details>
 
 ---
