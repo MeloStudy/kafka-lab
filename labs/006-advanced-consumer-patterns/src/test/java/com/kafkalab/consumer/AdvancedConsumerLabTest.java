@@ -30,7 +30,7 @@ public class AdvancedConsumerLabTest {
 
     @BeforeAll
     public static void setUpClass() {
-        kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:3.7.0"));
+        kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:4.3.0"));
         kafka.start();
 
         Properties adminProps = new Properties();
