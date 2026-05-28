@@ -83,6 +83,31 @@ docker-compose exec kafka \
 - `--property "parse.key=true"`: Tells the CLI to expect a key.
 - `key.separator=:`: Everything before the `:` is the key (`user1`), everything after is the value.
 
+### 4.1 Consuming Messages with Full Context
+
+To verify that your key routing actually worked, we can use the console consumer with the `DefaultMessageFormatter` to print exactly which partition received the message, along with the timestamp, key, and value.
+
+Open a new terminal window and run:
+
+```bash
+docker-compose exec kafka \
+  kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic producer-lab \
+  --from-beginning \
+  --property print.timestamp=true \
+  --property print.key=true \
+  --property print.value=true \
+  --property print.partition=true \
+  --formatter kafka.tools.DefaultMessageFormatter
+```
+
+**Command Dissection:**
+- `--property print.timestamp=true`: Extracts and displays the timestamp (either CreateTime or LogAppendTime).
+- `--property print.key=true` / `print.value=true`: Instructs the formatter to print both key and value.
+- `--property print.partition=true`: Extremely important here! It proves that messages with the identical key `user1` always land on the exact same partition.
+- `--formatter kafka.tools.DefaultMessageFormatter`: The built-in class capable of formatting the raw bytes into strings with the requested properties.
+
 ### 5. Produce Messages with Headers
 Headers are great for passing metadata (like Trace IDs) without touching the payload.
 ```bash
