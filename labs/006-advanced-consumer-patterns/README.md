@@ -33,7 +33,7 @@ Because we use `enable.auto.commit=false`, we control when offsets are committed
 To see how offsets are tracked, use the CLI while your consumer is running or after it finishes:
 
 ```bash
-docker exec -it kafka \
+docker-compose exec kafka \
   kafka-consumer-groups.sh \
   --bootstrap-server localhost:9092 \
   --describe \
@@ -54,7 +54,7 @@ The `RebalanceListenerConsumer` demonstrates how to save state and commit offset
 
 1. Create a topic with **3 partitions**:
 ```bash
-docker exec -it kafka \
+docker-compose exec kafka \
   kafka-topics.sh \
   --bootstrap-server localhost:9092 \
   --create \

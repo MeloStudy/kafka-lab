@@ -27,9 +27,9 @@ Kafka ships with a suite of bash scripts to manage the cluster natively. Since w
 
 To get an interactive shell inside the Kafka broker container, run:
 ```bash
-docker exec -it 001-architecture-core-kafka-1 bash
+docker-compose exec kafka bash
 ```
-*(Note: If your container is named differently, use `docker ps` to find the exact name).*
+*(Note: If you use the standalone docker command, you would need to use `docker ps` to find the exact container name).*
 
 ## Step 3: Managing Topics (`kafka-topics.sh`)
 
@@ -81,7 +81,7 @@ We will now simulate data flowing through the system. We need two separate termi
 **Terminal 1 (The Producer)**
 Exec into the container and start the console producer:
 ```bash
-docker exec -it 001-architecture-core-kafka-1 bash
+docker-compose exec kafka bash
 
 # Start pushing messages to the topic
 kafka-console-producer.sh \
@@ -93,7 +93,7 @@ Type a few messages (e.g., "Hello Kafka", "Event 2") and hit Enter after each.
 **Terminal 2 (The Consumer)**
 Exec into the container in a new tab and start the console consumer:
 ```bash
-docker exec -it 001-architecture-core-kafka-1 bash
+docker-compose exec kafka bash
 
 # Start consuming messages
 kafka-console-consumer.sh \

@@ -17,7 +17,7 @@ docker-compose up -d
 2. Open two terminal windows.
 In Terminal 1 (Read Uncommitted - Default):
 ```bash
-docker exec -it <container_id> kafka-console-consumer.sh \
+docker-compose exec kafka kafka-console-consumer.sh \
   --bootstrap-server localhost:9092 \
   --topic transactions-topic \
   --from-beginning
@@ -26,7 +26,7 @@ docker exec -it <container_id> kafka-console-consumer.sh \
 
 In Terminal 2 (Read Committed):
 ```bash
-docker exec -it <container_id> kafka-console-consumer.sh \
+docker-compose exec kafka kafka-console-consumer.sh \
   --bootstrap-server localhost:9092 \
   --topic transactions-topic \
   --from-beginning \
