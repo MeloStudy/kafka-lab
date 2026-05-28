@@ -20,7 +20,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.utility.DockerImageName;
 
@@ -49,10 +49,11 @@ public class SchemaRegistryTest {
                 .withNetworkAliases("kafka");
         kafka.start();
 
-        schemaRegistry = new GenericContainer<>(DockerImageName.parse("bitnami/schema-registry:7.6.0"))
+        schemaRegistry = new GenericContainer<>(DockerImageName.parse("confluentinc/cp-schema-registry:7.6.0"))
                 .withNetwork(network)
                 .withExposedPorts(8081)
-                .withEnv("SCHEMA_REGISTRY_KAFKA_BROKERS", "PLAINTEXT://kafka:9092")
+                .withEnv("SCHEMA_REGISTRY_HOST_NAME", "schema-registry")
+                .withEnv("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", "PLAINTEXT://kafka:9092")
                 .dependsOn(kafka);
         schemaRegistry.start();
 
