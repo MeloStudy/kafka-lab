@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.testcontainers.containers.wait.strategy.Wait;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -46,15 +48,18 @@ public class SchemaRegistryTest {
 
         kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:4.3.0"))
                 .withNetwork(network)
-                .withNetworkAliases("kafka");
+                .withNetworkAliases("kafka")
+                .withListener("kafka:19092");
         kafka.start();
 
         schemaRegistry = new GenericContainer<>(DockerImageName.parse("confluentinc/cp-schema-registry:7.6.0"))
                 .withNetwork(network)
                 .withExposedPorts(8081)
                 .withEnv("SCHEMA_REGISTRY_HOST_NAME", "schema-registry")
-                .withEnv("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", "PLAINTEXT://kafka:9092")
-                .dependsOn(kafka);
+                .withEnv("SCHEMA_REGISTRY_LISTENERS", "http://0.0.0.0:8081")
+                .withEnv("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", "PLAINTEXT://kafka:19092")
+                .dependsOn(kafka)
+                .waitingFor(Wait.forHttp("/subjects").forStatusCode(200).withStartupTimeout(Duration.ofSeconds(30)));
         schemaRegistry.start();
 
         schemaRegistryUrl = "http://" + schemaRegistry.getHost() + ":" + schemaRegistry.getMappedPort(8081);
