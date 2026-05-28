@@ -15,7 +15,7 @@ version: 2.0.0
 
 1. **Technical Verification**:
    - Run `mvn clean test` in the lab directory. It MUST pass.
-   - If a `docker-compose.yml` is present, verify its syntax and structure.
+   - If a `docker-compose.yml` is present, verify its syntax and structure. **CRITICAL**: You MUST explicitly check that the Docker image versions perfectly match the templates in `docs/templates/infra/` (e.g., verifying `apache/kafka:4.3.0`). Reject the lab if there is version drift.
 
 2. **Learner Journey Simulation**:
    - Read the `README.md` exactly as a student would.

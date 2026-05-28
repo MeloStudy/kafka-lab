@@ -19,7 +19,7 @@ version: 2.0.0
    - Tests MUST initially fail and then pass when you implement the solution.
 
 2. **Code Implementation**:
-   - Copy the chosen `docker-compose.yml` template from `docs/templates/infra/` into the lab folder if required.
+   - Copy the chosen `docker-compose.yml` template from `docs/templates/infra/` into the lab folder if required. **CRITICAL**: You MUST copy the template verbatim (reading the source file explicitly). Do NOT re-type or hallucinate image versions from memory.
    - Write the native `kafka-clients` or `spring-kafka` code.
    - Ensure proper Avro serialization or Schema Registry integration if the spec demands it.
 
