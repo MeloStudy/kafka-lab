@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "OrderV3",
+  "namespace": "com.kafkalab.schemaregistry.avro",
+  "fields": [
+    { "name": "orderId", "type": "string" },
+    { "name": "productId", "type": "string" },
+    { "name": "amount", "type": "double" },
+    { "name": "loyaltyPoints", "type": "int", "default": 0 },
+    { "name": "discount", "type": "double" }
+  ]
+}

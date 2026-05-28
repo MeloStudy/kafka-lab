@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "OrderV1",
+  "namespace": "com.kafkalab.schemaregistry.avro",
+  "fields": [
+    { "name": "orderId", "type": "string" },
+    { "name": "productId", "type": "string" },
+    { "name": "amount", "type": "double" }
+  ]
+}

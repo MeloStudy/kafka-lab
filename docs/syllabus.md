@@ -31,7 +31,7 @@ Focus: Deep dive into internal mechanics, failure recovery, and advanced control
   - Deep Dive: Transaction Coordinator, `transactional.id`, 2PC (Two-Phase Commit) in Kafka.
 - [DONE] **LAB-006: Advanced Consumer Patterns**
   - Concepts: Manual Offset Commits (Sync vs Async), Consumer Rebalance Listeners, Standby Consumers.
-- [PLANNED] **LAB-007: Data Contracts & Schema Registry**
+- [DONE] **LAB-007: Data Contracts & Schema Registry**
   - Concepts: Avro, Protobuf, Schema Evolution (Forward, Backward, Full Compatibility).
   - Deep Dive: Confluent Schema Registry internals and Data Governance principles.
 - [PLANNED] **LAB-008: Advanced Topic Configurations & Storage**
