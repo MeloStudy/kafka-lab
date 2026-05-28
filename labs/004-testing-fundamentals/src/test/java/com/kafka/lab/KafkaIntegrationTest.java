@@ -3,7 +3,7 @@ package com.kafka.lab;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -17,7 +17,7 @@ public class KafkaIntegrationTest {
 
     // 1. Define the Ephemeral Kafka Broker
     @Container
-    public static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0"));
+    public static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:4.3.0"));
 
     private OrderProducer producer;
     private OrderConsumer consumer;

@@ -21,7 +21,7 @@ mvn test
 ```
 
 ### What happens behind the scenes?
-1. **Docker Boot**: You will see logs from Testcontainers (`🐳 [confluentinc/cp-kafka:7.4.0]`). It is pulling the image (if you don't have it) and starting a real Kafka broker inside a Docker container.
+1. **Docker Boot**: You will see logs from Testcontainers (`🐳 [apache/kafka:4.3.0]`). It is pulling the image (if you don't have it) and starting a real Kafka broker inside a Docker container.
 2. **Topic Creation**: The test creates a topic implicitly when the producer sends a message.
 3. **Execution**: The `OrderProducer` sends `"ORDER-12345"`. The `OrderConsumer` polls and receives it.
 4. **Assertion**: JUnit verifies the received order matches the sent order.
