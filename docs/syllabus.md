@@ -20,7 +20,7 @@ Focus: Shifting the mindset from REST/Synchronous to Event-Driven and mastering 
 - [DONE] **LAB-004: Testing Fundamentals (TDD)**
   - Concepts: `TopologyTestDriver`, `EmbeddedKafka`.
   - Deep Dive: **Testcontainers** for robust integration testing, establishing the TDD baseline for all future labs.
-- [PLANNED] **MINI-PROJECT-1: Enterprise Event-Driven Workflow**
+- [DONE] **P01: Enterprise Event-Driven Workflow**
   - Objective: Build a complete end-to-end flow (e.g., Order Processing, User Registration) that receives an HTTP request, publishes an event, and processes it using **Reactive Programming (Spring WebFlux & Project Reactor)**, core Java clients, and TDD.
 
 ## Level 2: Advanced Core & Resiliency

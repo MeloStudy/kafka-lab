@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: p01-enterprise-workflow
+
+kafka:
+  producer:
+    bootstrap-servers: localhost:9092
+    topic:
+      inbound: orders.inbound
+  consumer:
+    bootstrap-servers: localhost:9092
+    group-id: order-processing-group
+    topic:
+      inbound: orders.inbound
+      confirmed: orders.confirmed
+      failed: orders.failed
