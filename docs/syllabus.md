@@ -37,7 +37,7 @@ Focus: Deep dive into internal mechanics, failure recovery, and advanced control
 - [PLANNED] **LAB-008: Advanced Topic Configurations & Storage**
   - Concepts: Log Compaction (Tombstone messages), Retention policies (Time vs Size).
   - Deep Dive: **Tiered Storage (KIP-405)** (Decoupling Compute from S3/Remote Storage).
-- [PLANNED] **LAB-009: Advanced Error Handling & DLTs**
+- [DONE] **LAB-009: Advanced Error Handling & DLTs**
   - Concepts: Exception Classification (Fatal vs Transient), Dead Letter Topics (DLT).
   - Deep Dive: Non-blocking Retries (`@RetryableTopic`), `DefaultErrorHandler`.
 

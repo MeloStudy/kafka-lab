@@ -19,6 +19,7 @@
         <module>004-testing-fundamentals</module>
         <module>005-delivery-semantics</module>
         <module>006-advanced-consumer-patterns</module>
+        <module>009-error-handling-and-dlts</module>
     </modules>
 
 </project>
