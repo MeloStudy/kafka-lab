@@ -23,6 +23,12 @@ The timing of *when* a consumer commits its offset defines the **Delivery Semant
 - High lag means your consumers are falling behind the producers.
 - You can monitor lag using native CLI tools or metrics platforms like Prometheus/Datadog.
 
+### Rewinding Offsets (Administrative Control)
+Offsets are not permanent once committed. As an administrator, you have the ability to manually overwrite a consumer group's offsets.
+- **Rewinding**: Setting the offset back to an earlier point to re-process data (e.g., after fixing a bug in your consumer logic).
+- **Fast-forwarding**: Setting the offset forward to skip over data (e.g., skipping a "poison pill" message that is crashing consumers).
+- *Rule:* The consumer group MUST be inactive (all consumer processes stopped) before you can administratively change its offsets.
+
 ## 3. The `poll()` Loop Mechanics
 The core of every consumer is the infinite `poll()` loop. This loop does two crucial things:
 1. It fetches data from the broker.

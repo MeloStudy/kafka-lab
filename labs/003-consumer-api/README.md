@@ -107,7 +107,42 @@ docker-compose exec kafka \
 ```
 *Notice that when this CLI tool starts, it triggers a Rebalance and acts as another member of your consumer group.*
 
-## Step 7: Clean Up
+## Step 7: Rewinding Consumer Offsets (Management)
+
+Sometimes, you deploy a bug and process data incorrectly. In Kafka, you can simply "rewind" your consumer group's offsets to re-read historical messages. 
+
+> [!IMPORTANT]
+> A consumer group must be **empty/inactive** to modify its offsets.
+1. Make sure you stop your Java Consumer in the terminal (`Ctrl+C`). Leave the producer running.
+
+2. **Dry Run**: Let's see what happens if we attempt to rewind the group to the earliest available offsets. The `--dry-run` flag lets us preview the changes without actually committing them:
+```bash
+docker-compose exec kafka \
+  kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group lab003-group \
+    --topic lab003.events \
+    --reset-offsets \
+    --to-earliest \
+    --dry-run
+```
+You will see the `NEW-OFFSET` displayed as `0`. 
+
+3. **Execute**: Now apply the change by replacing `--dry-run` with `--execute`:
+```bash
+docker-compose exec kafka \
+  kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group lab003-group \
+    --topic lab003.events \
+    --reset-offsets \
+    --to-earliest \
+    --execute
+```
+
+4. **Verify**: Start your Java Consumer again (`mvn compile exec:java -Dexec.mainClass="com.kafka.lab.VanillaConsumer"`). You will see it immediately re-consume all the historical messages from offset 0!
+
+## Step 8: Clean Up
 
 Stop your Java processes (`Ctrl+C`), and gracefully tear down the Kafka cluster:
 ```bash
