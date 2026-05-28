@@ -14,7 +14,7 @@ The `docker-compose.yml` deploys a single-node KRaft broker and Kafka-UI on `htt
 
 Let's create the topic we will use for this lab. We will explicitly give it **3 partitions**:
 ```bash
-docker exec -it 003-consumer-api-kafka-1 \
+docker-compose exec kafka \
   kafka-topics.sh \
     --create \
     --topic lab003.events \
@@ -37,6 +37,11 @@ Run it in a separate terminal tab:
 ```bash
 mvn compile exec:java -Dexec.mainClass="com.kafka.lab.DummyProducer"
 ```
+*Command Dissection:*
+- `mvn compile`: Compiles the Java project.
+- `exec:java`: Uses the Exec Maven Plugin to run a Java class.
+- `-Dexec.mainClass`: Specifies the fully qualified name of the main class to execute.
+
 Keep this running in the background.
 
 ## Step 3: Run the Consumer
@@ -45,6 +50,8 @@ In a new terminal tab, run the `VanillaConsumer.java`:
 ```bash
 mvn compile exec:java -Dexec.mainClass="com.kafka.lab.VanillaConsumer"
 ```
+*(Same Maven dissection as above, but for the Consumer class).*
+
 You will see it polling messages. Look at the console output; notice which `Partition` the consumer is reading from. Since it is the only consumer in the `lab003-group`, it is assigned all 3 partitions (0, 1, and 2).
 
 ## Step 4: Horizontal Scaling (Rebalances)
@@ -75,6 +82,37 @@ However, we configured `MAX_POLL_INTERVAL_MS_CONFIG` to `10000` (10 seconds).
 **What happens?**
 After 10 seconds, the Kafka Broker notices that the consumer hasn't called `poll()`. It assumes the consumer is deadlocked, **kicks it out of the group**, and triggers a Rebalance. 
 When the consumer finally wakes up after 15 seconds and tries to commit its offset or fetch more data, it will crash with a `CommitFailedException` because it is no longer the owner of that partition!
+
+## Step 6: Observability (Monitoring Consumer Lag)
+
+To understand how far behind your consumers are, you can use the native CLI tools. 
+
+First, describe the consumer group:
+```bash
+docker-compose exec kafka \
+  kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --describe \
+    --group lab003-group
+```
+You will see a table displaying the `CURRENT-OFFSET`, `LOG-END-OFFSET`, and `LAG` for each partition. If `LAG` is high, your consumers are too slow!
+
+You can also use the console consumer to join an existing group. This is useful for debugging what the group is seeing:
+```bash
+docker-compose exec kafka \
+  kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic lab003.events \
+    --group lab003-group
+```
+*Notice that when this CLI tool starts, it triggers a Rebalance and acts as another member of your consumer group.*
+
+## Step 7: Clean Up
+
+Stop your Java processes (`Ctrl+C`), and gracefully tear down the Kafka cluster:
+```bash
+docker-compose down -v
+```
 
 ---
 

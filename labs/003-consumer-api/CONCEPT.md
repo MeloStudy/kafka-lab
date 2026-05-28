@@ -11,8 +11,17 @@ A **Consumer Group** (defined by `group.id`) is a logical group of consumers tha
 ## 2. Offsets and `__consumer_offsets`
 Consumers need to remember where they left off in case they crash. They do this by "committing" their current offset back to Kafka.
 - Kafka stores these commits in an internal, compacted topic called `__consumer_offsets`.
-- **Auto Commit**: By default (`enable.auto.commit=true`), the consumer automatically commits the highest offset it has processed every 5 seconds. This provides **At-Least-Once** delivery semantics, but can lead to duplicate processing if the consumer crashes before committing.
-- **Manual Commit**: Setting it to `false` requires you to call `consumer.commitSync()` manually. If you commit *before* processing a message and crash, you lose data (**At-Most-Once**). 
+
+### Delivery Semantics & Committing
+The timing of *when* a consumer commits its offset defines the **Delivery Semantics** of your application:
+- **At-Least-Once (Default)**: If `enable.auto.commit=true` (or if you manually commit *after* processing), Kafka ensures the message is processed. However, if the consumer crashes after processing but *before* committing, the new consumer will re-read and re-process the message, leading to duplicates. 
+- **At-Most-Once**: If you manually commit (`enable.auto.commit=false`) *before* processing the message and then crash, the new consumer will start after that offset. The message is permanently lost.
+- **Exactly-Once**: Requires Kafka Transactions (covered in later labs).
+
+### Consumer Lag
+**Consumer Lag** is one of the most critical observability metrics in Kafka. It is the difference between the latest offset produced to a partition (Log End Offset) and the latest offset committed by the consumer group (Current Offset).
+- High lag means your consumers are falling behind the producers.
+- You can monitor lag using native CLI tools or metrics platforms like Prometheus/Datadog.
 
 ## 3. The `poll()` Loop Mechanics
 The core of every consumer is the infinite `poll()` loop. This loop does two crucial things:
