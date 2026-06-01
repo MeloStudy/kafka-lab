@@ -44,7 +44,7 @@ Focus: Deep dive into internal mechanics, failure recovery, and advanced control
 ## Level 3: The Kafka Ecosystem (Connect & Streams)
 Focus: Utilizing the broader ecosystem for data integration and stateful processing.
 
-- [PLANNED] **LAB-010: Kafka Connect Basics**
+- [DONE] **LAB-010: Kafka Connect Basics**
   - Concepts: Source/Sink Connectors, Standalone vs Distributed, Connect Workers.
   - Deep Dive: CDC (Change Data Capture) using Debezium.
 - [PLANNED] **LAB-011: Kafka Streams API - Stateless Processing**
