@@ -39,3 +39,6 @@ All codebase elements (variables, methods, classes) and inline code comments MUS
 - **Naming Convention**: `XXX-slug-name` (e.g., `001-architecture-core`).
 - **Interactive Self-Assessment**: Every laboratory README MUST include a "Self-Assessment" or "Knowledge Check" section using collapsible `<details>` blocks to provide immediate pedagogical feedback.
 - **Backpressure Scenarios**: Labs involving data streams MUST explain how backpressure is handled, particularly the `poll()` mechanism in Kafka consumers.
+- **Coding & Testing Standards**:
+  - **Logging**: NEVER use `System.out.println`. Always use SLF4J (specifically via Lombok's `@Slf4j` annotation) for application logging.
+  - **JUnit 5 Visibility**: Test classes and test methods MUST be package-private (omit the `public` modifier) in alignment with modern JUnit 5 best practices.
