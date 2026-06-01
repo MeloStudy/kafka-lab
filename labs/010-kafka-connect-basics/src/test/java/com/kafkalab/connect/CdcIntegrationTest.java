@@ -9,10 +9,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.net.URI;
@@ -32,9 +33,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CdcIntegrationTest {
     static Network network = Network.newNetwork();
 
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.0"))
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:4.3.0"))
             .withNetwork(network)
-            .withNetworkAliases("kafka");
+            .withNetworkAliases("kafka")
+            .withListener("kafka:19092");
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15")
             .withNetwork(network)
@@ -47,7 +50,7 @@ class CdcIntegrationTest {
     static GenericContainer<?> connect = new GenericContainer<>(DockerImageName.parse("debezium/connect:2.5"))
             .withNetwork(network)
             .withExposedPorts(8083)
-            .withEnv("BOOTSTRAP_SERVERS", "kafka:9092")
+            .withEnv("BOOTSTRAP_SERVERS", "kafka:19092")
             .withEnv("GROUP_ID", "1")
             .withEnv("CONFIG_STORAGE_TOPIC", "connect_configs")
             .withEnv("OFFSET_STORAGE_TOPIC", "connect_offsets")
