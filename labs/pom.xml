@@ -23,6 +23,7 @@
         <module>009-error-handling-and-dlts</module>
         <module>010-kafka-connect-basics</module>
         <module>011-kafka-streams-stateless</module>
+        <module>012-kafka-streams-stateful</module>
         <module>014-reactive-kafka</module>
     </modules>
 

@@ -49,7 +49,7 @@ Focus: Utilizing the broader ecosystem for data integration and stateful process
   - Deep Dive: CDC (Change Data Capture) using Debezium.
 - [DONE] **LAB-011: Kafka Streams API - Stateless Processing**
   - Concepts: KStream, Map, Filter, Branch, Topology, Stream Threads.
-- [PLANNED] **LAB-012: Kafka Streams API - Stateful Processing**
+- [DRAFT] **LAB-012: Kafka Streams API - Stateful Processing**
   - Concepts: KTable, GlobalKTable, State Stores (RocksDB).
   - Deep Dive: Aggregations, Windowing (Tumbling, Hopping, Session), Joins (Stream-Stream, Stream-Table).
 - [PLANNED] **MINI-PROJECT-2: Real-time Analytics Dashboard**
