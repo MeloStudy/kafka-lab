@@ -47,7 +47,7 @@ Focus: Utilizing the broader ecosystem for data integration and stateful process
 - [DONE] **LAB-010: Kafka Connect Basics**
   - Concepts: Source/Sink Connectors, Standalone vs Distributed, Connect Workers.
   - Deep Dive: CDC (Change Data Capture) using Debezium.
-- [PLANNED] **LAB-011: Kafka Streams API - Stateless Processing**
+- [DONE] **LAB-011: Kafka Streams API - Stateless Processing**
   - Concepts: KStream, Map, Filter, Branch, Topology, Stream Threads.
 - [PLANNED] **LAB-012: Kafka Streams API - Stateful Processing**
   - Concepts: KTable, GlobalKTable, State Stores (RocksDB).
