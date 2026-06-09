@@ -26,6 +26,7 @@
         <module>012-kafka-streams-stateful</module>
         <module>013-spring-boot-kafka</module>
         <module>014-reactive-kafka</module>
+        <module>015-observability-tracing-chaos</module>
     </modules>
 
 </project>

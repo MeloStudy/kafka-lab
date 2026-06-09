@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: observability-chaos-lab
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: order-group
+      auto-offset-reset: earliest
+      properties:
+        # Increase session timeout so toxiproxy lag doesn't immediately kill it unless we want it to
+        session.timeout.ms: 10000
+    listener:
+      observation-enabled: true
+    template:
+      observation-enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health, info
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+  tracing:
+    sampling:
+      probability: 1.0 # 100% sampling for educational purposes

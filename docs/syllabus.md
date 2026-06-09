@@ -63,7 +63,7 @@ Focus: Integrating Kafka with modern Spring frameworks and deep observability.
 - [DONE] **LAB-014: Reactive Kafka (WebFlux Integration)**
   - Concepts: Project Reactor integration, `reactor-kafka`, Receiver/Sender, **Bridging REST to Kafka**.
   - Deep Dive: **Reactive Pipeline Consumption**, Non-blocking backpressure, and avoiding thread starvation.
-- [PLANNED] **LAB-015: Observability, Tracing & Chaos**
+- [DONE] **LAB-015: Observability, Tracing & Chaos**
   - Concepts: Micrometer, JMX Metrics.
   - Deep Dive: Distributed Tracing (OpenTelemetry/Span IDs), Chaos Engineering (Toxiproxy for network partitions).
 
